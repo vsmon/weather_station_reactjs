@@ -7,6 +7,10 @@ export const Hour = styled.div`
   align-items: center;
   //background-color: white;
   padding: 10px;
+
+  @media (max-width: 425px) {
+    padding: 0px;
+  }
 `;
 
 export const ImgHour = styled.img`

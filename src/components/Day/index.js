@@ -17,16 +17,17 @@ const DayForecast = ({ data }) => {
     <Day>
       <TextDay>{week[new Date(data.weeklyDate).getDay()]}</TextDay>
       <ImgDay src={data.urlIconWeekly}></ImgDay>
-      <TextDay>
-        Max {data.weeklyTempMax}º Min {data.weeklyTempMin}º
-      </TextDay>
+      <div style={{ flexDirection: "column" }}>
+        <TextDay>Max {data.weeklyTempMax}º</TextDay>
+        <TextDay>Min {data.weeklyTempMin}º</TextDay>
+      </div>
       <SunRiseContainer>
         <SunRise>
-          <ImgSunRise src={"http://openweathermap.org/img/wn/01d@2x.png"} />{" "}
+          <ImgSunRise src={"http://openweathermap.org/img/wn/01d@2x.png"} />
           <TextDay>{moment(new Date(data.dateSunrise)).format("LT")}</TextDay>
         </SunRise>
         <SunSet>
-          <ImgSunRise src={"http://openweathermap.org/img/wn/01n@2x.png"} />{" "}
+          <ImgSunRise src={"http://openweathermap.org/img/wn/01n@2x.png"} />
           <TextDay>{moment(new Date(data.dateSunset)).format("LT")}</TextDay>
         </SunSet>
       </SunRiseContainer>

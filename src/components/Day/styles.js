@@ -9,6 +9,11 @@ export const Day = styled.div`
   //background-color: green;
   padding: 10px;
   margin-top: 50px;
+  flex-wrap: wrap;
+
+  @media (max-width: 425px) {
+    padding: 0px;
+  }
 `;
 
 export const TextDay = styled.h1`
@@ -16,6 +21,10 @@ export const TextDay = styled.h1`
   font-size: 14px;
   //margin-left: 20px;
   margin-bottom: 10px;
+
+  @media (max-width: 425px) {
+    font-size: 10px;
+  }
 `;
 
 export const ImgDay = styled.img`
@@ -43,10 +52,18 @@ export const SunRise = styled.div`
   flex: 1;
   display: flex;
   flex-direction: row;
+
+  @media (max-width: 425px) {
+    flex-direction: column;
+  }
 `;
 
 export const SunSet = styled.div`
   flex: 1;
   display: flex;
   flex-direction: row;
+
+  @media (max-width: 425px) {
+    flex-direction: column;
+  }
 `;

@@ -5,6 +5,7 @@ export const Container = styled.div`
   flex: 1;
   flex-direction: column;
   justify-content: center;
+  flex-wrap: wrap;
   //height: 100vh;
 `;
 
@@ -25,6 +26,10 @@ export const MainTemp = styled.div`
   justify-content: space-between;
   //background-color: green;
   padding: 10px;
+
+  @media (max-width: 425px) {
+    flex-direction: column;
+  }
 `;
 
 export const DailyForecast = styled.div`
@@ -46,13 +51,17 @@ export const WeekForecast = styled.div`
   //background-color: brown;
   padding: 10px;
   margin-bottom: 150px;
-  overflow-x: scroll;
 
-  ::-webkit-scrollbar {
+  @media (max-width: 425px) {
+  }
+
+  /* overflow-x: scroll;
+
+   ::-webkit-scrollbar {
     background-color: #ff1;
     //visibility: hidden;
     opacity: 0.5;
-  }
+  } */
 `;
 
 export const Temperature = styled.div`
@@ -106,7 +115,9 @@ export const DetailTemp = styled.div`
   justify-content: center;
   align-items: left;
 
-  //background-color: gold;
+  @media (max-width: 425px) {
+    justify-content: start;
+  }
 `;
 
 export const TextDetail = styled.h1`
@@ -114,4 +125,8 @@ export const TextDetail = styled.h1`
   font-size: 20px;
   padding: 5px;
   padding-left: 100px;
+
+  @media (max-width: 425px) {
+    padding-left: 0px;
+  }
 `;

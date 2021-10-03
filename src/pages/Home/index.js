@@ -19,6 +19,8 @@ import HourForecast from "../../components/Hour";
 import DayForecast from "../../components/Day";
 import { apiClimaTempo, apiOpenWeather } from "../../services/api";
 
+import { data } from "../../utils/data";
+
 export default function Home() {
   const [dailyForecast, setDailyForecast] = useState([]);
   const [weeklyForecast, setWeeklyForecast] = useState([]);
@@ -30,37 +32,76 @@ export default function Home() {
   });
 
   useEffect(() => {
-    //getDataJson();
+    //getForecast();
 
-    getForecast();
+    dataTest();
   }, []);
 
-  const getDataJson = async () => {
-    const currentForecast = await apiClimaTempo.get(
-      "http://192.168.0.23:19000/current"
-    );
-    const dailyForecast = await apiClimaTempo.get(
-      "http://192.168.0.23:19000/daily"
-    );
-    const weeklyForecast = await apiClimaTempo.get(
-      "http://192.168.0.23:19000/weekly"
-    );
+  const dataTest = () => {
+    const resp = { data };
+    const urlCurrentIcon = `http://openweathermap.org/img/wn/${resp.data.current.weather[0].icon}@2x.png`;
+    const {
+      current: {
+        weather: [{ description }],
+      },
+      current: { temp: CurrentTemperature },
+      current: { humidity },
+      current: { wind_speed },
+      current: { feels_like },
+    } = resp.data;
 
-    setWeeklyForecast(weeklyForecast.data.data);
+    setCurrentWeather({
+      urlCurrentIcon,
+      description,
+      CurrentTemperature,
+      humidity,
+      wind_speed,
+      feels_like,
+    });
 
-    setInfoLocale(currentForecast.data);
+    const { hourly, daily } = resp.data;
 
-    //setWeatherToday(currentForecast.data.data);
+    const convertTimeStamp = (timestamp) => new Date(timestamp * 1000);
 
-    //const url = require(`../../assets/images/128px/${currentForecast.data.data.icon}.png`);
-    console.log(currentForecast.data.data.icon);
-    const urlCurrentIcon = `http://openweathermap.org/img/wn/${currentForecast.data.data.icon}@2x.png`;
-    const urlIconHourly = `http://openweathermap.org/img/wn/${currentForecast.data.data.icon}@2x.png`;
+    const dailyForecast = [];
+    hourly.map((item) => {
+      const {
+        dt: date,
+        temp: hourlyTemperature,
+        weather: [{ icon: iconHourly }],
+      } = item;
+      const urlIconHourly = `http://openweathermap.org/img/wn/${iconHourly}@2x.png`;
+      const hourlyDate = convertTimeStamp(date);
+      dailyForecast.push({ hourlyDate, hourlyTemperature, urlIconHourly });
+    });
+    setDailyForecast(dailyForecast);
 
-    setCurrentWeather({ ...currentForecast.data.data, urlCurrentIcon });
-
-    setDailyForecast(dailyForecast.data.data);
+    const weeklyForeacast = [];
+    daily.map((item) => {
+      const {
+        dt: date,
+        temp: { max: weeklyTempMax, min: weeklyTempMin },
+        weather: [{ icon: iconWeekly }],
+        sunrise: weeklySunrise,
+        sunset: weeklySunset,
+      } = item;
+      const urlIconWeekly = `http://openweathermap.org/img/wn/${iconWeekly}@2x.png`;
+      const dateSunrise = new Date(weeklySunrise * 1000);
+      const dateSunset = new Date(weeklySunset * 1000);
+      const weeklyDate = new Date(date * 1000);
+      weeklyForeacast.push({
+        weeklyDate,
+        weeklyTempMax,
+        weeklyTempMin,
+        urlIconWeekly,
+        dateSunrise,
+        dateSunset,
+      });
+    });
+    setWeeklyForecast(weeklyForeacast);
+    setInfoLocale({ name: "Sorocaba", state: "SP", country: "Brasil" });
   };
+
   const getPosition = () => {
     navigator.geolocation.getCurrentPosition((coordinates) => {
       const lat = coordinates.coords.latitude;
@@ -174,7 +215,7 @@ export default function Home() {
       </DailyForecast>
 
       <WeekForecast>
-        {weeklyForecast.map((item, index) => {
+        {weeklyForecast.slice(0, 7).map((item, index) => {
           return <DayForecast key={index} data={item} />;
         })}
       </WeekForecast>
